@@ -2,8 +2,14 @@
 
 ## Fetching data
 
+### UNLOCODES
 run `./get_codes.sh` to populate the `/data` folder with the 2019-01 unlocode
 export.
+
+### Ports
+To grab the Ports information, with a user who can access the ptrac database
+via `psql purpletrac` run `./get_ports.sh` to generat a csv of ptrac ports
+`data/ptrac_ports.csv`.
 
 ## Analysis
 
