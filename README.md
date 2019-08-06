@@ -37,3 +37,36 @@ All have verbose names and are available by checking `locals()`.
 7	Value reserved for fixed transport functions (e.g. oil platform).
 
 B	Specifies that the location is Border crossing.
+
+### Status codes:
+AA: Approved by competent national government agency
+
+AC: Approved by Customs Authority
+
+AF: Approved by national facilitation body
+
+AI: Code adopted by international organisation (IATA or ECLAC)
+
+AM: Approved by the UN/LOCODE Maintenance Agency
+
+AQ: Entry approved, functions not verified
+
+AS: Approved by national standardisation body
+
+RL: Recognised location - Existence and representation of location name confirmed by check against nominated gazetteer or other reference work
+
+RN: Request from credible national sources for locations in their own country
+
+RQ: Request under consideration
+
+UR: Entry included on user's request; not officially approved
+
+RR: Request rejected
+
+QQ: Original entry not verified since date indicated
+
+XX: Entry that will be removed from the next issue of UN/LOCODE
+
+### Date format
+
+The date the location was added or updated: 0207 is July 2002, 9501 is January 1995, etc.
