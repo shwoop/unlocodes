@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -fp data &>/dev/null
 TMP=mktemp
 curl https://www.unece.org/fileadmin/DAM/cefact/locode/loc191csv.zip -o $TMP &>/dev/null &&
     unzip $TMP -d data/ &>/dev/null ||

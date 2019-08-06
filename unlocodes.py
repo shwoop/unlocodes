@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import argparse
 import glob
+import os
 
 import IPython
 import pandas as pd
@@ -74,6 +75,7 @@ def main(output: bool) -> None:
 
     # save csvs
     if output:
+        os.makedirs('output', exist_ok=True)
         save_output(merged, 'full_data')
         save_output(ptrac_exclusive, 'ptrac_only_ports')
         save_output(missing, 'missing_unlocodes')
