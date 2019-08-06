@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import argparse
 import glob
 
 import IPython
@@ -42,7 +43,13 @@ def load_unlocodes() -> pd.DataFrame:
     return df
 
 
-def main() -> None:
+def save_output(df: pd.DataFrame, path: str) -> None:
+    if not path.endswith('.csv'):
+        path += '.csv'
+    df.to_csv(f'output/{path}', header=True)
+
+
+def main(output: bool) -> None:
     ports = load_ports()
     unlocodes = load_unlocodes()
 
@@ -65,11 +72,27 @@ def main() -> None:
     # missing that are nautical PORTS!
     missing_ports = missing.loc[missing['function'].str.contains('1')]
 
+    # save csvs
+    if output:
+        save_output(merged, 'full_data')
+        save_output(ptrac_exclusive, 'ptrac_only_ports')
+        save_output(missing, 'missing_unlocodes')
+        save_output(missing_ports, 'missing_unlocodes_that_are_ports')
+
     # Launch IPython interactive shell
     user_ns = locals()
-    user_ns['pd'] = pd
+    user_ns.update({'pd': pd, 'save_output': save_output})
     IPython.start_ipython(argv=[], user_ns=user_ns)
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='UNLOCODE data analysis.')
+    parser.add_argument(
+        '-o',
+        dest='output',
+        action='store_true',
+        default=False,
+        help='save Output csv files to ./output/ (default: False)'
+    )
+    args = parser.parse_args()
+    main(args.output)
