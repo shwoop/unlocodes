@@ -31,8 +31,18 @@ def load_unlocodes() -> pd.DataFrame:
 
     df = pd.concat(csv_imports, axis=0, ignore_index=True)
     df.columns = [
-        'change', 'lo_country', 'lo_city', 'name', 'namewodiacritics', 'subdiv',
-        'function', 'status', 'date', 'iata', 'coordinates', 'remarks'
+        'change',
+        'lo_country',
+        'lo_city',
+        'name',
+        'namewodiacritics',
+        'subdiv',
+        'function',
+        'status',
+        'date',
+        'iata',
+        'coordinates',
+        'remarks'
     ]
 
     # make concatenated unlocode
