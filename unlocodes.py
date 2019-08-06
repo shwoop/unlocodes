@@ -83,6 +83,12 @@ def main(output: bool) -> None:
     # missing that are nautical PORTS!
     missing_ports = missing.loc[missing['function'].str.contains('1')]
 
+    # proposed attition to ptrac
+    proposed_addition = merged.loc[
+        merged['status'].isin(['AA', 'AC', 'AF', 'AI', 'AI', 'RL', 'QQ']) &
+        pd.isna(merged['ptrac_unlocode'])
+    ]
+
     # save csvs
     if output:
         os.makedirs('output', exist_ok=True)
@@ -90,6 +96,7 @@ def main(output: bool) -> None:
         save_output(ptrac_exclusive, 'ptrac_only_ports')
         save_output(missing, 'missing_unlocodes')
         save_output(missing_ports, 'missing_unlocodes_that_are_ports')
+        save_output(proposed_addition, 'ports_to_add_to_ptrac')
 
     # Launch IPython interactive shell
     user_ns = locals()
