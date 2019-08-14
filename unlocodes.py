@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import argparse
 import glob
 import os
@@ -45,11 +46,19 @@ def load_unlocodes() -> pd.DataFrame:
         'remarks'
     ]
 
+    # Remove the International waters XZ codes
+    df = df.loc[df['lo_country'] != 'XZ']
+
     # make concatenated unlocode
     df['unlocode'] = df['lo_country'] + df['lo_city']
 
     # remove weird country header rows
     df = df.dropna(subset=['unlocode'])
+
+    # Some rows are duplicated, having the translations in different orders
+    #  eg, here(ici) and ici(here)
+    #  dropping duplicates will pick the first one in the list.
+    df = df.drop_duplicates(subset=['unlocode'])
 
     return df
 
@@ -125,7 +134,7 @@ def main(output: bool) -> None:
     # attach isocountry for country codes
     isocountry_codes = isocountry[['alpha_2', 'alpha_3', 'id']].copy()
     isocountry_codes.columns = ['alpha_2', 'alpha_3', 'iso_country_id']
-    codes_ptrac_and_country = pd.merge(
+    codes_ptrac_and_isocountry = pd.merge(
         codes_with_ptrac_ports,
         isocountry_codes,
         how='left',
@@ -133,10 +142,29 @@ def main(output: bool) -> None:
         right_on='alpha_2'
     )
 
+    # attach country for country id
+    country_codes = country[['code', 'iso_3166_1_alpha_2', 'name']].copy()
+    country_codes.columns = [
+        'country_code', 'iso_3166_1_alpha_2', 'country_code_name'
+    ]
+    codes_ptrac_and_country = pd.merge(
+        codes_ptrac_and_isocountry,
+        country_codes,
+        how='left',
+        left_on='alpha_3',
+        right_on='country_code'
+    )
+
     data = codes_ptrac_and_country
 
     # strip out known unlocodes
     data = data.loc[pd.isnull(data['ptrac_unlocode'])].copy()
+
+    # dump non standard country code ports
+    non_standard_country_code_rows = (
+        data.loc[pd.isnull(data['country_code'])]
+    )
+    data = data.loc[pd.notnull(data['country_code'])]
 
     # generate coordinates
     data['latitude'] = (
@@ -156,7 +184,7 @@ def main(output: bool) -> None:
     data['iso_country_id'] = data[['iso_country_id']].fillna('0').astype(int)
 
     final = data[[
-        'unlocode', 'namewodiacritics', 'alpha_3', 'latitude', 'longitude',
+        'unlocode', 'namewodiacritics', 'country_code', 'latitude', 'longitude',
         'scale', 'polygon', 'position', 'iso_country_id', 'port_source',
         'ihs_port_id', 'world_port_number'
     ]].copy()
