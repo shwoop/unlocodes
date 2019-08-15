@@ -6,7 +6,7 @@ follow these instructions for applying them ao a zone.
 
 *   gather the necessary details to psql into the environment
 
-    `psql -H $host -U $user $database`
+    `psql -h $host -U $user $database`
 
 *   run the psql comment to get a db prompt, run it from this directory or please
     adjust the following commands to point to the csv.
