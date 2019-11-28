@@ -1,3 +1,4 @@
+from os import environ
 from time import sleep
 from typing import Optional
 from pprint import pprint
@@ -14,8 +15,11 @@ from unlocodes import (
     translate_coords_to_lon,
 )
 
-# This is Alistair's, please don't make him insolvent
-GCPAPIKEY = 'AIzaSyDlcHt1qCSiB5LLe12XrL1s20GNwY9qsAs'
+GCPAPIKEY = environ.get('GCPAPIKEY', '')
+if not GCPAPIKEY:
+    print('PLEASE SET GCPAPIKEY ON THE ENVIRONMENT')
+    exit(1)
+
 MAPS_API_URI = 'https://maps.googleapis.com/maps/api'
 
 
